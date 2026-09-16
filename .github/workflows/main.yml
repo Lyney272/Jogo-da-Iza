@@ -1,31 +1,33 @@
-@echo off
-title CapiCare - Gerando EXE
+name: Criar CapiCare EXE
 
-echo ========================================
-echo       CapiCare - Build do Windows
-echo ========================================
-echo.
+on:
+  workflow_dispatch:
 
-python -m pip install --upgrade pygame pyinstaller
+jobs:
+  build:
+    runs-on: windows-latest
 
-echo.
-echo Gerando CapiCare.exe...
-echo.
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
 
-python -m PyInstaller ^
-    --onefile ^
-    --windowed ^
-    --clean ^
-    --name "CapiCare" ^
-    main.py
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-echo.
-echo ========================================
-echo Build concluido!
-echo.
-echo Seu jogo esta em:
-echo dist\CapiCare.exe
-echo ========================================
-echo.
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pygame pyinstaller
 
-pause
+      - name: Criar executavel
+        run: |
+          python -m PyInstaller --onefile --windowed --clean --noconfirm --name CapiCare main.py
+
+      - name: Enviar EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: CapiCare-Windows
+          path: dist/CapiCare.exe
+
