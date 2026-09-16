@@ -1,24 +1,19 @@
-name: Criar EXE da Capivara
+name: Capivara EXE
 
 on:
   workflow_dispatch:
 
 jobs:
-  criar-exe:
+  build:
     runs-on: windows-latest
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-
+          python-version: "3.11"
       - run: python -m pip install pyinstaller
-
-      - run: python -m PyInstaller --onefile --windowed --name MinhaCapivara jogo.py
-
+      - run: python -m PyInstaller --onefile --windowed jogo.py
       - uses: actions/upload-artifact@v4
         with:
-          name: MinhaCapivara
-          path: dist/MinhaCapivara.exe
+          name: Capivara
+          path: dist/jogo.exe
