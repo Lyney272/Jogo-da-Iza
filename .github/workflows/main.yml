@@ -1,4 +1,4 @@
-name: Gerar Minha Capivara
+name: Gerar EXE
 
 on:
   workflow_dispatch:
@@ -8,22 +8,18 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Baixar codigo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Configurar Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Instalar PyInstaller
-        run: pip install pyinstaller
+      - run: python -m pip install pyinstaller
 
-      - name: Criar EXE
-        run: pyinstaller --onefile --windowed --name MinhaCapivara main.py
+      - run: python -m PyInstaller --onefile --windowed main.py
 
-      - name: Salvar EXE
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: MinhaCapivara
-          path: dist/MinhaCapivara.exe
+          path: dist/main.exe
+
