@@ -1,33 +1,30 @@
-name: Criar CapiCare EXE
+name: Testar Jogo da Capivara
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
-    runs-on: windows-latest
+  testar:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Baixar projeto
+      - name: Baixar o código
         uses: actions/checkout@v4
 
-      - name: Instalar Python
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Instalar dependencias
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install pygame pyinstaller
+      - name: Verificar Python
+        run: python --version
 
-      - name: Criar executavel
-        run: |
-          python -m PyInstaller --onefile --windowed --clean --noconfirm --name CapiCare main.py
+      - name: Verificar sintaxe do jogo
+        run: python -m py_compile main.py
 
-      - name: Enviar EXE
-        uses: actions/upload-artifact@v4
-        with:
-          name: CapiCare-Windows
-          path: dist/CapiCare.exe
 
