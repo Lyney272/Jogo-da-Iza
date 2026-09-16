@@ -1,17 +1,17 @@
-name: Criar EXE da Capivara
+name: Gerar EXE da Capivara
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  criar-exe:
+  build:
     runs-on: windows-latest
 
     steps:
-      - name: Baixar o projeto
+      - name: Baixar arquivos
         uses: actions/checkout@v4
 
       - name: Instalar Python
@@ -19,16 +19,42 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Mostrar arquivos
+        shell: powershell
+        run: |
+          Write-Host "Arquivos do projeto:"
+          Get-ChildItem -Recurse
+
       - name: Instalar PyInstaller
-        run: python -m pip install pyinstaller
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pyinstaller
 
-      - name: Criar executável
-        run: python -m PyInstaller --onefile --windowed --name MinhaCapivara main.yml
+      - name: Verificar main.py
+        run: |
+          if (!(Test-Path "main.py")) {
+            Write-Host "ERRO: main.py não foi encontrado!"
+            exit 1
+          }
 
-      - name: Disponibilizar o EXE
+          Write-Host "main.py encontrado!"
+          python -m py_compile main.py
+
+      - name: Criar EXE
+        run: |
+          python -m PyInstaller --onefile --windowed --name MinhaCapivara main.py
+
+      - name: Verificar EXE
+        run: |
+          if (!(Test-Path "dist\MinhaCapivara.exe")) {
+            Write-Host "ERRO: o EXE não foi criado!"
+            exit 1
+          }
+
+          Write-Host "EXE criado com sucesso!"
+
+      - name: Enviar EXE
         uses: actions/upload-artifact@v4
         with:
-          name: MinhaCapivara
-          path: dist/MinhaCapivara.exe
-
-
+          name: MinhaCapivara-Windows
+          path: dist\MinhaCapivara.exe
