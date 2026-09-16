@@ -8,22 +8,17 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Baixar o jogo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Configurar Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
-      - name: Instalar PyInstaller
-        run: python -m pip install pyinstaller
+      - run: python -m pip install pyinstaller
 
-      - name: Criar executavel
-        run: python -m PyInstaller --onefile --windowed --name MinhaCapivara jogo.py
+      - run: python -m PyInstaller --onefile --windowed --name MinhaCapivara jogo.py
 
-      - name: Disponibilizar o executavel
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: MinhaCapivara
           path: dist/MinhaCapivara.exe
