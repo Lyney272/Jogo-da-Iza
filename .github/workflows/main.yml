@@ -1,0 +1,31 @@
+@echo off
+title CapiCare - Gerando EXE
+
+echo ========================================
+echo       CapiCare - Build do Windows
+echo ========================================
+echo.
+
+python -m pip install --upgrade pygame pyinstaller
+
+echo.
+echo Gerando CapiCare.exe...
+echo.
+
+python -m PyInstaller ^
+    --onefile ^
+    --windowed ^
+    --clean ^
+    --name "CapiCare" ^
+    main.py
+
+echo.
+echo ========================================
+echo Build concluido!
+echo.
+echo Seu jogo esta em:
+echo dist\CapiCare.exe
+echo ========================================
+echo.
+
+pause
