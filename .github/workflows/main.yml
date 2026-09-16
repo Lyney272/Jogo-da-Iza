@@ -23,7 +23,7 @@ jobs:
         run: python -m pip install pyinstaller
 
       - name: Criar executável
-        run: python -m PyInstaller --onefile --windowed --name MinhaCapivara main.py
+        run: python -m PyInstaller --onefile --windowed --name MinhaCapivara main.yml
 
       - name: Disponibilizar o EXE
         uses: actions/upload-artifact@v4
